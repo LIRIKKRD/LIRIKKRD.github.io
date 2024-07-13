@@ -1,45 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-	<title>Document</title>
+  <title>Hamster Кошелек</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      color: var(--tg-theme-text-color);
+      background-color: var(--tg-theme-bg-color);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .balance {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      background-color: var(--tg-theme-button-color);
+      color: var(--tg-theme-button-text-color);
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button:hover {
+      background-color: #2196F3;
+    }
+
+    .withdrawal-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+    }
+
+    .withdrawal-popup .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .withdrawal-popup input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .withdrawal-popup .error {
+      color: red;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 <body>
-	<div class="container">
-		<div class="inner">
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn1">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn2">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn3">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn4">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn5">Add</button>
-			</div>
-			<div class="item">
-				<img src="1.png" alt="" class="img">
-				<button class="btn" id="btn6">Add</button>
-			</div>
-		</div>
-	</div>
-	<div class="usercard" id="usercard">
-		
-	</div>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    let tg = window.Telegram.WebApp;
+    let profilePic = document.getElementById("profilePic");
+    let userName = document.getElementById("userName");
+    let balance = document.getElementById("balance");
+    let withdrawalPopup = document.getElementById("withdrawalPopup");
+    let closeButton = document.getElementById("closeButton");
+    let bankSelect = document.getElementById("bankSelect");
+    let cardInput = document.getElementById("cardInput");
+    let withdrawalButton = document.getElementById("withdrawalButton");
+    let error = document.getElementById("error");
 
-	<script src="https://telegram.org/js/telegram-web-app.js"></script>
-	<script src="app.js"></script>
+    tg.ready(function() {
+      tg.expand();
+
+      // Получение данных пользователя
+      if (tg.initDataUnsafe) {
+        profilePic.src = tg.initDataUnsafe.user.photo_url;
+        userName.innerText = tg.initDataUnsafe.user.first_name;
+      }
+
+      // Настройка баланса (введите баланс)
+      balance.innerText = "1000";
+
+      // Открытие всплывающего окна
+      withdrawalButton.addEventListener("click", function() {
+        withdrawalPopup.style.display = "block";
+      });
+
+      // Закрытие всплывающего окна
+      closeButton.addEventListener("click", function() {
+        withdrawalPopup.style.display = "none";
+        error.innerText = ""; // Очистка сообщения об ошибке
+        cardInput.value = ""; // Очистка поля ввода
+      });
+
+      // Обработка отправки данных
+      withdrawalButton.addEventListener("click", function() {
+        let selectedBank = bankSelect.value;
+        let cardNumber = cardInput.value;
+
+        // Проверка введенных данных (обработка ошибок)
+        if (selectedBank === "" || cardNumber === "") {
+          error.innerText = "Пожалуйста, введите все данные";
+          return;
+        }
+
+        //  TODO: Отправка данных в бот
+        tg.sendData(`bank=${selectedBank}&card=${cardNumber}`);
+        // Закрытие всплывающего окна
+        withdrawalPopup.style.display = "none";
+        //  TODO: Добавить обратную связь пользователю
+        alert("Запрос на вывод средств отправлен!");
+      });
+    });
+  </script>
+
+  <h1>Hamster - Кошелек</h1>
+
+  <div class="profile-info">
+    <img id="profilePic" class="profile-pic" src="" alt="Профиль">
+    <p id="userName"></p>
+  </div>
+
+  <p class="balance" id="balance"></p>
+
+  <button id="withdrawalButton" class="button">Вывод денежных средств</button>
+
+  <div id="withdrawalPopup" class="withdrawal-popup">
+    <span id="closeButton" class="close-button">&times;</span>
+    <h2>Вывод средств</h2>
+    <p id="error" class="error"></p>
+    <label for="bankSelect">Банк:</label>
+    <select id="bankSelect">
+      <option value="">Выберите банк</option>
+      <option value="Sberbank">Сбербанк</option>
+      <option value="Tinkoff">Тинькофф</option>
+      <option value="VTB">ВТБ</option>
+      </select>
+
+    <label for="cardInput">Номер карты:</label>
+    <input type="text" id="cardInput" placeholder="Введите номер карты">
+
+    <button id="withdrawalButton" class="button">Произвести выплату</button>
+  </div>
 </body>
 </html>
