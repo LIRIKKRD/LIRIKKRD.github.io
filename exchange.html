@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Обмен HMSTR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(to bottom, #2f3542, #1e272e);
+            color: #fff;
+        }
+        .container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        h1 {
+            margin-top: 0;
+            color: #ff9f43;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        p {
+            margin-bottom: 16px;
+        }
+        .exchange-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .exchange-input input {
+            flex-grow: 1;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #1e272e;
+            color: #fff;
+            margin-right: 12px;
+        }
+        .exchange-input button {
+            background-color: #ff9f43;
+            color: #2f3542;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .exchange-input button:hover {
+            background-color: #e08b38;
+        }
+        .button-row {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            gap: 16px;
+        }
+        button {
+            padding: 16px 24px;
+            background-color: #ff9f43;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        button:hover {
+            background-color: #e08b38;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+            .exchange-input {
+                margin-bottom: 16px;
+            }
+            button {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Обмен HMSTR</h1>
+        <p>Введите количество HMSTR для обмена:</p>
+        <div class="exchange-input">
+            <input type="text" id="exchange-amount" placeholder="Количество монет">
+            <button onclick="handleExchange()">Обменять</button>
+        </div>
+        <div class="button-row">
+            <button onclick="updateBalance(exchangedAmount); window.location.href = 'index.html'">Обменять</button>
+            <button onclick="window.location.href = 'index.html'">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+        function handleExchange() {
+
+            const exchangeAmount = parseFloat(document.getElementById('exchange-amount').value);
+            if (!isNaN(exchangeAmount) && exchangeAmount > 0) {
+                // Логика обмена HMSTR на рубли
+                const exchangedAmount = 1200; // Предположим, что обмен 1 HMSTR дает 1.2 ₽
+                updateBalance(exchangedAmount);
+            }
+        }
+
+        function updateBalance(amount) {
+            balance += amount;
+            balanceElement.textContent = formatBalance(balance);
+        }
+    </script>
+</body>
+</html>
+
